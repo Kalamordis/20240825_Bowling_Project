@@ -28,20 +28,18 @@ class BowlingGame:
 
         for frame in range(10):
             if self._is_strike(frame_index):
-                # Strike
                 score += 10 + self._strike_bonus(frame_index)
                 logging.debug(f"Frame {frame + 1} (Strike): Total score so far: {score}")
                 frame_index += 1
             elif self._is_spare(frame_index):
-                # Spare
                 score += 10 + self._spare_bonus(frame_index)
                 logging.debug(f"Frame {frame + 1} (Spare): Total score so far: {score}")
                 frame_index += 2
             else:
-                # Open frame
-                score += self.rolls[frame_index]
+                score += self.rolls[frame_index] + self.rolls[frame_index + 1]  # ✅ FIXED
                 logging.debug(f"Frame {frame + 1} (Open): Total score so far: {score}")
                 frame_index += 2
+
 
         logging.debug(f"Final score: {score}")
         return score
@@ -66,7 +64,7 @@ class BowlingGame:
 
         Args:
             frame_index: Index of the first roll in a frame
-
+s
         Returns:
             True if the rolls form a spare, False otherwise
         """
@@ -86,15 +84,6 @@ class BowlingGame:
 
 
     def _spare_bonus(self, frame_index):
-        """
-        Calculate the bonus for a spare.
-
-        Args:
-            frame_index: Index of the first roll in a spare
-
-        Returns:
-            The value of the roll after the spare
-        """
         bonus = self.rolls[frame_index + 2]
         logging.debug(f"Spare bonus for frame {frame_index + 1}: {bonus}")
         return bonus
