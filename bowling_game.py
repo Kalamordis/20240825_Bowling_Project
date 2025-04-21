@@ -1,8 +1,7 @@
-"""
-Bowling Game Implementation
-A module for calculating bowling game scores.
-"""
+import logging
 
+# Configure logging to show debug messages
+logging.basicConfig(level=logging.DEBUG)
 
 class BowlingGame:
     def __init__(self):
@@ -10,6 +9,7 @@ class BowlingGame:
         # Each frame has up to 2 rolls (except the 10th frame which can have 3)
         self.rolls = []
         self.current_roll = 0
+        logging.debug("Bowling game initialized.")
 
     def roll(self, pins):
         """
@@ -20,6 +20,7 @@ class BowlingGame:
         """
         self.rolls.append(pins)
         self.current_roll += 1
+        logging.debug(f"Roll {self.current_roll}: {pins} pins.")
 
     def score(self):
         """Calculate the score for the current game."""
@@ -30,16 +31,20 @@ class BowlingGame:
             if self._is_strike(frame_index):
                 # Strike
                 score += 10 + self._strike_bonus(frame_index)
+                logging.debug(f"Frame {frame + 1} (Strike): Total score so far: {score}")
                 frame_index += 1
             elif self._is_spare(frame_index):
                 # Spare
                 score += 10 + self._spare_bonus(frame_index)
+                logging.debug(f"Frame {frame + 1} (Spare): Total score so far: {score}")
                 frame_index += 2
             else:
                 # Open frame
                 score += self.rolls[frame_index]
+                logging.debug(f"Frame {frame + 1} (Open): Total score so far: {score}")
                 frame_index += 2
 
+        logging.debug(f"Final score: {score}")
         return score
 
     def _is_strike(self, frame_index):
@@ -52,7 +57,9 @@ class BowlingGame:
         Returns:
             True if the roll is a strike, False otherwise
         """
-        return frame_index < len(self.rolls) and self.rolls[frame_index] == 10
+        result = frame_index < len(self.rolls) and self.rolls[frame_index] == 10
+        logging.debug(f"Frame {frame_index + 1} is Strike: {result}")
+        return result
 
     def _is_spare(self, frame_index):
         """
@@ -64,7 +71,9 @@ class BowlingGame:
         Returns:
             True if the rolls form a spare, False otherwise
         """
-        return frame_index + 1 < len(self.rolls) and self.rolls[frame_index] + self.rolls[frame_index + 1] == 10
+        result = frame_index + 1 < len(self.rolls) and self.rolls[frame_index] + self.rolls[frame_index + 1] == 10
+        logging.debug(f"Frame {frame_index + 1} is Spare: {result}")
+        return result
 
     def _strike_bonus(self, frame_index):
         """
@@ -76,7 +85,9 @@ class BowlingGame:
         Returns:
             The value of the next two rolls after the strike
         """
-        return self.rolls[frame_index + 1] + self.rolls[frame_index + 2]
+        bonus = self.rolls[frame_index + 1] + self.rolls[frame_index + 2]
+        logging.debug(f"Strike bonus for frame {frame_index + 1}: {bonus}")
+        return bonus
 
     def _spare_bonus(self, frame_index):
         """
@@ -88,4 +99,6 @@ class BowlingGame:
         Returns:
             The value of the roll after the spare
         """
-        return self.rolls[frame_index + 2]
+        bonus = self.rolls[frame_index + 2]
+        logging.debug(f"Spare bonus for frame {frame_index + 1}: {bonus}")
+        return bonus
