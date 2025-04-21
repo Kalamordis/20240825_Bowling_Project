@@ -1,0 +1,7 @@
+Bowling Game
+================
+
+.. automodule:: bowling_game
+   :members:
+   :undoc-members:
+   :show-inheritance:
